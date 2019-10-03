@@ -1,0 +1,33 @@
+{
+  "name": "swaggest/json-schema-maker",
+  "type": "library",
+  "description": "Instance to JSON schema and back",
+  "keywords": ["json-schema"],
+  "homepage": "https://github.com/swaggest/json-schema-maker",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Viacheslav Poturaev",
+      "email": "vearutop@gmail.com",
+      "homepage": "https://github.com/vearutop"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "ext-json": "*",
+    "swaggest/json-schema": "^0.12.21"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Swaggest\\JsonSchemaMaker\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Swaggest\\JsonSchemaMaker\\Tests\\": "tests/src/"
+    }
+  }
+}
