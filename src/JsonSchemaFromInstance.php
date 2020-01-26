@@ -11,6 +11,8 @@ class JsonSchemaFromInstance
     /** @var Schema */
     private $schema;
 
+    public $upgradeIntToNumber = true;
+
     /**
      * JsonSchemaFromInstance constructor.
      * @param Schema $schema
@@ -82,11 +84,32 @@ class JsonSchemaFromInstance
             $this->schema->type = $type;
         } elseif (is_string($this->schema->type)) {
             if ($this->schema->type !== $type) {
+                if ($this->upgradeIntToNumber &&
+                    ($type === Schema::NUMBER || $type === Schema::INTEGER) &&
+                    ($this->schema->type === Schema::NUMBER || $this->schema->type === Schema::INTEGER)) {
+                    $this->schema->type = Schema::NUMBER;
+                    return;
+                }
+
                 $this->schema->type = [$this->schema->type, $type];
             }
         } elseif (is_array($this->schema->type)) {
             if (!in_array($type, $this->schema->type)) {
                 $this->schema->type[] = $type;
+            }
+            if ($this->upgradeIntToNumber && ($type === Schema::NUMBER || $type === Schema::INTEGER)) {
+                $ii = $in = -1;
+                foreach ($this->schema->type as $i => $t) {
+                    if ($t === Schema::NUMBER) {
+                        $in = $i;
+                    } elseif ($t === Schema::INTEGER) {
+                        $ii = $i;
+                    }
+                }
+                if ($ii !== -1 && $in !== -1) {
+                    unset($this->schema->type[$ii]);
+                    $this->schema->type = array_values($this->schema->type);
+                }
             }
         }
     }

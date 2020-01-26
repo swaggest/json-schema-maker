@@ -55,10 +55,7 @@ class JsonSchemaFromInstanceTest extends TestCase
                     "type": "integer"
                 },
                 "value": {
-                    "type": [
-                        "integer",
-                        "number"
-                    ]
+                    "type": "number"
                 },
                 "extra": {
                     "items": {
