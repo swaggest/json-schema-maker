@@ -15,7 +15,7 @@
   "require": {
     "php": ">=5.5.0",
     "ext-json": "*",
-    "swaggest/json-schema": "^0.12.21"
+    "swaggest/json-schema": "^0.12.26"
   },
   "require-dev": {
     "phpunit/phpunit": "^5"

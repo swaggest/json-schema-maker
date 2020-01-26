@@ -8,9 +8,12 @@ use Swaggest\JsonSchemaMaker\JsonSchemaFromInstance;
 
 class JsonSchemaFromInstanceTest extends TestCase
 {
-    public function testSimple()
+    private $instanceValue;
+
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
-        $instanceValue = (object)[
+        parent::__construct($name, $data, $dataName);
+        $this->instanceValue = (object)[
             'name' => 'Jane',
             'age' => 25,
             'orders' => [
@@ -19,17 +22,24 @@ class JsonSchemaFromInstanceTest extends TestCase
                     'value' => 100,
                 ],
                 (object)[
+                    'id' => 123,
+                    'value' => null,
+                ],
+                (object)[
                     'id' => 456,
                     'value' => 100.5,
                     'extra' => [1, 2, "abc"]
                 ],
-
             ],
         ];
+    }
 
+
+    public function testSimple()
+    {
         $schema = new Schema();
         $f = new JsonSchemaFromInstance($schema);
-        $f->addInstanceValue($instanceValue);
+        $f->addInstanceValue($this->instanceValue);
 
         $this->assertEquals(<<<'JSON'
 {
@@ -55,7 +65,10 @@ class JsonSchemaFromInstanceTest extends TestCase
                     "type": "integer"
                 },
                 "value": {
-                    "type": "number"
+                    "type": [
+                        "null",
+                        "number"
+                    ]
                 },
                 "extra": {
                     "items": {
@@ -75,6 +88,114 @@ JSON
             , json_encode(Schema::export($schema), JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
 
     }
+
+
+    public function testSimpleNullable()
+    {
+        $schema = new Schema();
+        $f = new JsonSchemaFromInstance($schema);
+        $f->options->useNullable = true;
+        $f->addInstanceValue($this->instanceValue);
+
+        $this->assertEquals(<<<'JSON'
+{
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "age": {
+            "type": "integer"
+        },
+        "orders": {
+            "items": {
+                "$ref": "#/definitions/orders.element"
+            },
+            "type": "array"
+        }
+    },
+    "type": "object",
+    "definitions": {
+        "orders.element": {
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "value": {
+                    "type": "number",
+                    "nullable": true
+                },
+                "extra": {
+                    "items": {
+                        "type": [
+                            "integer",
+                            "string"
+                        ]
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        }
+    }
+}
+JSON
+            , json_encode(Schema::export($schema), JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
+
+    }
+
+    public function testSimpleXNullable()
+    {
+        $schema = new Schema();
+        $f = new JsonSchemaFromInstance($schema);
+        $f->options->useXNullable = true;
+        $f->addInstanceValue($this->instanceValue);
+
+        $this->assertEquals(<<<'JSON'
+{
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "age": {
+            "type": "integer"
+        },
+        "orders": {
+            "items": {
+                "$ref": "#/definitions/orders.element"
+            },
+            "type": "array"
+        }
+    },
+    "type": "object",
+    "definitions": {
+        "orders.element": {
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "value": {
+                    "type": "number",
+                    "x-nullable": true
+                },
+                "extra": {
+                    "items": {
+                        "type": [
+                            "integer",
+                            "string"
+                        ]
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        }
+    }
+}
+JSON
+            , json_encode(Schema::export($schema), JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
+
+    }
+
 
     public function testGithubExample()
     {

@@ -11,15 +11,21 @@ class JsonSchemaFromInstance
     /** @var Schema */
     private $schema;
 
-    public $upgradeIntToNumber = true;
+    /** @var Options */
+    public $options;
 
     /**
      * JsonSchemaFromInstance constructor.
      * @param Schema $schema
+     * @param Options|null $options
      */
-    public function __construct(Schema $schema)
+    public function __construct(Schema $schema, Options $options = null)
     {
         $this->schema = $schema;
+        if (null === $options) {
+            $options = new Options();
+        }
+        $this->options = $options;
     }
 
     public function addInstanceValue($instanceValue, $path = '')
@@ -53,7 +59,7 @@ class JsonSchemaFromInstance
 
         foreach ($instanceValue as $item) {
             if ($this->schema->items instanceof Schema) {
-                $f = new JsonSchemaFromInstance($this->schema->items);
+                $f = new JsonSchemaFromInstance($this->schema->items, $this->options);
                 $f->addInstanceValue($item, $path . '.element');
             }
         }
@@ -62,7 +68,7 @@ class JsonSchemaFromInstance
     private function addObject($instanceValue, $path)
     {
         if (null === $this->schema->properties) {
-            $this->schema->setFromRef('#/definitions/' . JsonPointer::escapeSegment(ltrim($path, '.')));
+            $this->schema->setFromRef($this->options->defsPtr . JsonPointer::escapeSegment(ltrim($path, '.')));
             $this->schema->properties = new Properties();
         }
         foreach (get_object_vars($instanceValue) as $propertyName => $propertyValue) {
@@ -72,7 +78,7 @@ class JsonSchemaFromInstance
                 $this->schema->setProperty($propertyName, $property);
             }
             if ($property instanceof Schema) {
-                $f = new JsonSchemaFromInstance($property);
+                $f = new JsonSchemaFromInstance($property, $this->options);
                 $f->addInstanceValue($propertyValue, $path . '.' . JsonPointer::escapeSegment($propertyName));
             }
         }
@@ -80,11 +86,23 @@ class JsonSchemaFromInstance
 
     private function addType($type)
     {
+        if ($type === Schema::NULL) {
+            if ($this->options->useNullable) {
+                $this->schema->{'nullable'} = true;
+                return;
+            }
+
+            if ($this->options->useXNullable) {
+                $this->schema->{'x-nullable'} = true;
+                return;
+            }
+        }
+
         if ($this->schema->type === null) {
             $this->schema->type = $type;
         } elseif (is_string($this->schema->type)) {
             if ($this->schema->type !== $type) {
-                if ($this->upgradeIntToNumber &&
+                if ($this->options->upgradeIntToNumber &&
                     ($type === Schema::NUMBER || $type === Schema::INTEGER) &&
                     ($this->schema->type === Schema::NUMBER || $this->schema->type === Schema::INTEGER)) {
                     $this->schema->type = Schema::NUMBER;
@@ -97,7 +115,7 @@ class JsonSchemaFromInstance
             if (!in_array($type, $this->schema->type)) {
                 $this->schema->type[] = $type;
             }
-            if ($this->upgradeIntToNumber && ($type === Schema::NUMBER || $type === Schema::INTEGER)) {
+            if ($this->options->upgradeIntToNumber && ($type === Schema::NUMBER || $type === Schema::INTEGER)) {
                 $ii = $in = -1;
                 foreach ($this->schema->type as $i => $t) {
                     if ($t === Schema::NUMBER) {
