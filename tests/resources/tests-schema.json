@@ -1,0 +1,388 @@
+{
+    "items": {
+        "$ref": "#/definitions/element"
+    },
+    "type": "array",
+    "definitions": {
+        "element": {
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "doc": {
+                    "$ref": "#/definitions/element.doc"
+                },
+                "patch": {
+                    "items": {
+                        "$ref": "#/definitions/element.patch.element"
+                    },
+                    "type": "array"
+                },
+                "expected": {
+                    "$ref": "#/definitions/element.expected"
+                },
+                "disabled": {
+                    "type": "boolean"
+                },
+                "error": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "element.doc": {
+            "items": {
+                "$ref": "#/definitions/element.doc.element"
+            },
+            "properties": {
+                "foo": {
+                    "$ref": "#/definitions/element.doc.foo"
+                },
+                "bar": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": [
+                        "integer",
+                        "array",
+                        "string"
+                    ]
+                },
+                "baz": {
+                    "items": {
+                        "$ref": "#/definitions/element.doc.baz.element"
+                    },
+                    "type": "array"
+                },
+                "1e0": {
+                    "type": "string"
+                },
+                "": {
+                    "type": "integer"
+                },
+                "a/b": {
+                    "type": "integer"
+                },
+                "c%d": {
+                    "type": "integer"
+                },
+                "e^f": {
+                    "type": "integer"
+                },
+                "g|h": {
+                    "type": "integer"
+                },
+                "i\\j": {
+                    "type": "integer"
+                },
+                "k\"l": {
+                    "type": "integer"
+                },
+                " ": {
+                    "type": "integer"
+                },
+                "m~n": {
+                    "type": "integer"
+                }
+            },
+            "type": [
+                "object",
+                "array",
+                "string"
+            ]
+        },
+        "element.doc.element": {
+            "items": {
+                "items": {
+                    "type": "integer"
+                },
+                "type": [
+                    "integer",
+                    "array"
+                ]
+            },
+            "properties": {
+                "foo": {
+                    "type": "integer"
+                },
+                "bar": {
+                    "type": "integer"
+                }
+            },
+            "type": [
+                "object",
+                "string",
+                "integer",
+                "array",
+                "null",
+                "boolean"
+            ]
+        },
+        "element.doc.foo": {
+            "items": {
+                "$ref": "#/definitions/element.doc.foo.element"
+            },
+            "properties": {
+                "foo": {
+                    "type": "integer"
+                },
+                "bar": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": [
+                        "integer",
+                        "array"
+                    ]
+                }
+            },
+            "type": [
+                "integer",
+                "object",
+                "null",
+                "array",
+                "string"
+            ]
+        },
+        "element.doc.foo.element": {
+            "properties": {
+                "foo": {
+                    "type": "integer"
+                },
+                "bar": {
+                    "type": "integer"
+                }
+            },
+            "type": [
+                "integer",
+                "object",
+                "string"
+            ]
+        },
+        "element.doc.baz.element": {
+            "properties": {
+                "qux": {
+                    "type": "string"
+                }
+            },
+            "type": [
+                "object",
+                "integer"
+            ]
+        },
+        "element.patch.element": {
+            "properties": {
+                "op": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "value": {
+                    "$ref": "#/definitions/element.patch.element.value"
+                },
+                "spurious": {
+                    "type": "integer"
+                },
+                "from": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "element.patch.element.value": {
+            "items": {
+                "$ref": "#/definitions/element.patch.element.value.element"
+            },
+            "properties": {
+                "baz": {
+                    "type": "string"
+                },
+                "bar": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": [
+                        "integer",
+                        "array"
+                    ]
+                },
+                "foo": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "integer",
+                        "array"
+                    ]
+                }
+            },
+            "type": [
+                "integer",
+                "string",
+                "array",
+                "object",
+                "boolean",
+                "null"
+            ]
+        },
+        "element.patch.element.value.element": {
+            "properties": {
+                "bar": {
+                    "type": "integer"
+                },
+                "foo": {
+                    "type": "integer"
+                }
+            },
+            "type": [
+                "integer",
+                "string",
+                "object"
+            ]
+        },
+        "element.expected": {
+            "items": {
+                "$ref": "#/definitions/element.expected.element"
+            },
+            "properties": {
+                "foo": {
+                    "$ref": "#/definitions/element.expected.foo"
+                },
+                "bar": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": [
+                        "integer",
+                        "array",
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "": {
+                    "type": "integer"
+                },
+                "baz": {
+                    "items": {
+                        "$ref": "#/definitions/element.expected.baz.element"
+                    },
+                    "type": [
+                        "array",
+                        "string"
+                    ]
+                },
+                "0": {
+                    "type": "string"
+                },
+                "1e0": {
+                    "type": "string"
+                },
+                "boo": {
+                    "$ref": "#/definitions/element.expected.boo"
+                },
+                "FOO": {
+                    "type": "string"
+                }
+            },
+            "type": [
+                "object",
+                "array",
+                "string"
+            ]
+        },
+        "element.expected.element": {
+            "items": {
+                "items": {
+                    "$ref": "#/definitions/element.expected.element.element.element"
+                },
+                "type": [
+                    "string",
+                    "integer",
+                    "array"
+                ]
+            },
+            "properties": {
+                "bar": {
+                    "type": "integer"
+                },
+                "foo": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "integer",
+                        "array"
+                    ]
+                }
+            },
+            "type": [
+                "object",
+                "string",
+                "array",
+                "integer",
+                "boolean",
+                "null"
+            ]
+        },
+        "element.expected.element.element.element": {
+            "properties": {
+                "foo": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": [
+                "integer",
+                "object"
+            ]
+        },
+        "element.expected.foo": {
+            "items": {
+                "type": "integer"
+            },
+            "properties": {
+                "bar": {
+                    "type": "integer"
+                },
+                "foo": {
+                    "type": "integer"
+                },
+                "": {
+                    "type": "integer"
+                }
+            },
+            "type": [
+                "integer",
+                "object",
+                "string",
+                "array",
+                "null"
+            ]
+        },
+        "element.expected.baz.element": {
+            "properties": {
+                "qux": {
+                    "type": "string"
+                },
+                "foo": {
+                    "type": "string"
+                }
+            },
+            "type": [
+                "object",
+                "string"
+            ]
+        },
+        "element.expected.boo": {
+            "properties": {
+                "qux": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    }
+}

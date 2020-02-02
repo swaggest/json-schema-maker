@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad7983bc4213bd80c3ba05130c5f0f23",
+    "content-hash": "d85223f8ca48cd7241f2eae663dc1968",
     "packages": [
         {
             "name": "phplang/scope-exit",
@@ -52,16 +52,16 @@
         },
         {
             "name": "swaggest/json-diff",
-            "version": "v3.7.3",
+            "version": "v3.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swaggest/json-diff.git",
-                "reference": "df30535920131d575330ed0ed7a696e1a42cddd3"
+                "reference": "fccbbd6ee31b5949ab52e9c53f7a1e1b06d84716"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swaggest/json-diff/zipball/df30535920131d575330ed0ed7a696e1a42cddd3",
-                "reference": "df30535920131d575330ed0ed7a696e1a42cddd3",
+                "url": "https://api.github.com/repos/swaggest/json-diff/zipball/fccbbd6ee31b5949ab52e9c53f7a1e1b06d84716",
+                "reference": "fccbbd6ee31b5949ab52e9c53f7a1e1b06d84716",
                 "shasum": ""
             },
             "require": {
@@ -87,20 +87,20 @@
                 }
             ],
             "description": "JSON diff/rearrange/patch/pointer library for PHP",
-            "time": "2020-01-24T12:11:25+00:00"
+            "time": "2020-01-26T20:52:06+00:00"
         },
         {
             "name": "swaggest/json-schema",
-            "version": "v0.12.26",
+            "version": "v0.12.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swaggest/php-json-schema.git",
-                "reference": "93e8b6ef1d9b531ecaf4a0a028af5db1b7121ab5"
+                "reference": "6f57c0d80e246c2868accaab5c550cd470a5537f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swaggest/php-json-schema/zipball/93e8b6ef1d9b531ecaf4a0a028af5db1b7121ab5",
-                "reference": "93e8b6ef1d9b531ecaf4a0a028af5db1b7121ab5",
+                "url": "https://api.github.com/repos/swaggest/php-json-schema/zipball/6f57c0d80e246c2868accaab5c550cd470a5537f",
+                "reference": "6f57c0d80e246c2868accaab5c550cd470a5537f",
                 "shasum": ""
             },
             "require": {
@@ -131,7 +131,7 @@
                 }
             ],
             "description": "High definition PHP structures with JSON-schema based validation",
-            "time": "2020-01-24T16:33:31+00:00"
+            "time": "2020-01-27T09:47:50+00:00"
         }
     ],
     "packages-dev": [

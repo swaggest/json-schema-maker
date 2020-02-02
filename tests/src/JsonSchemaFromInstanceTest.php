@@ -218,4 +218,63 @@ JSON
         );
 //        file_put_contents(__DIR__ . '/../resources/github-example-schema-inline.json', json_encode($schema, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
     }
+
+
+    public function testJsonPatchTests()
+    {
+        $instanceValue = json_decode(file_get_contents(__DIR__ . '/../resources/tests.json'));
+        $schema = new Schema();
+        $b = new JsonSchemaFromInstance($schema);
+        $b->addInstanceValue($instanceValue);
+
+        $s = Schema::export($schema);
+        $this->assertEquals(file_get_contents(__DIR__ . '/../resources/tests-schema.json'),
+            json_encode($s, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
+    }
+
+    public function testObjectOrString()
+    {
+        $instanceValue = json_decode(<<<'JSON'
+[
+  "abc",
+  {
+    "id": "def",
+    "val": 1
+  }
+]
+JSON
+);
+        $schema = new Schema();
+        $b = new JsonSchemaFromInstance($schema);
+        $b->addInstanceValue($instanceValue);
+
+        $expected = <<<'JSON'
+{
+    "items": {
+        "$ref": "#/definitions/element"
+    },
+    "type": "array",
+    "definitions": {
+        "element": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "val": {
+                    "type": "integer"
+                }
+            },
+            "type": [
+                "string",
+                "object"
+            ]
+        }
+    }
+}
+JSON;
+
+        $s = Schema::export($schema);
+        $this->assertEquals($expected, json_encode($s, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
+
+    }
 }
