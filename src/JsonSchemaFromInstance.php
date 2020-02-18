@@ -71,7 +71,8 @@ class JsonSchemaFromInstance
             $this->schema->setFromRef($this->options->defsPtr . JsonPointer::escapeSegment(ltrim($path, '.')));
             $this->schema->properties = new Properties();
         }
-        foreach (get_object_vars($instanceValue) as $propertyName => $propertyValue) {
+        $objVars = get_object_vars($instanceValue);
+        foreach ($objVars as $propertyName => $propertyValue) {
             $property = $this->schema->properties->__get($propertyName);
             if (empty($property)) {
                 $property = new Schema();
@@ -80,6 +81,21 @@ class JsonSchemaFromInstance
             if ($property instanceof Schema) {
                 $f = new JsonSchemaFromInstance($property, $this->options);
                 $f->addInstanceValue($propertyValue, $path . '.' . JsonPointer::escapeSegment($propertyName));
+            }
+        }
+        if (!empty($this->schema->required)) {
+            $removed = false;
+            foreach ($this->schema->required as $i => $key) {
+                if (!array_key_exists($key, $objVars)) {
+                    $removed = true;
+                    unset($this->schema->required[$i]);
+                }
+            }
+            if ($removed) {
+                $this->schema->required = array_values($this->schema->required);
+                if (empty($this->schema->required)) {
+                    $this->schema->required = null;
+                }
             }
         }
     }
