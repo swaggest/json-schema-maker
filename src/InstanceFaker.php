@@ -83,7 +83,7 @@ class InstanceFaker
 
     private function makeNumber()
     {
-        if (isset($this->schema->{'example'})) {
+        if (isset($this->schema->{'example'}) && (is_int($this->schema->{'example'}) || is_float($this->schema->{'example'}))) {
             return $this->schema->{'example'};
         }
 
@@ -114,7 +114,7 @@ class InstanceFaker
             return '123e4567-e89b-12d3-a456-426655440000';
         }
 
-        if (isset($this->schema->{'example'})) {
+        if (isset($this->schema->{'example'}) && is_string($this->schema->{'example'})) {
             return $this->schema->{'example'};
         }
 
