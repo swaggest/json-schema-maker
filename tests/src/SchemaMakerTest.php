@@ -4,9 +4,10 @@ namespace Swaggest\JsonSchemaMaker\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Swaggest\JsonSchema\Schema;
-use Swaggest\JsonSchemaMaker\JsonSchemaFromInstance;
+use Swaggest\JsonSchemaMaker\SchemaMaker;
+use Swaggest\JsonSchemaMaker\Options;
 
-class JsonSchemaFromInstanceTest extends TestCase
+class SchemaMakerTest extends TestCase
 {
     private $instanceValue;
 
@@ -38,7 +39,7 @@ class JsonSchemaFromInstanceTest extends TestCase
     public function testSimple()
     {
         $schema = new Schema();
-        $f = new JsonSchemaFromInstance($schema);
+        $f = new SchemaMaker($schema);
         $f->addInstanceValue($this->instanceValue);
 
         $this->assertEquals(<<<'JSON'
@@ -93,7 +94,7 @@ JSON
     public function testSimpleNullable()
     {
         $schema = new Schema();
-        $f = new JsonSchemaFromInstance($schema);
+        $f = new SchemaMaker($schema);
         $f->options->useNullable = true;
         $f->addInstanceValue($this->instanceValue);
 
@@ -146,7 +147,7 @@ JSON
     public function testSimpleXNullable()
     {
         $schema = new Schema();
-        $f = new JsonSchemaFromInstance($schema);
+        $f = new SchemaMaker($schema);
         $f->options->useXNullable = true;
         $f->addInstanceValue($this->instanceValue);
 
@@ -201,7 +202,7 @@ JSON
     {
         $instanceValue = json_decode(file_get_contents(__DIR__ . '/../resources/github-example.json'));
         $schema = new Schema();
-        $f = new JsonSchemaFromInstance($schema);
+        $f = new SchemaMaker($schema);
         $f->addInstanceValue($instanceValue);
 
         $schemaJson = Schema::export($schema);
@@ -217,6 +218,20 @@ JSON
             json_encode($schema, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
         );
 //        file_put_contents(__DIR__ . '/../resources/github-example-schema-inline.json', json_encode($schema, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
+
+        $schema = new Schema();
+        $options = new Options();
+        $options->collectExamples = true;
+        $withExamples = new SchemaMaker($schema, $options);
+        $withExamples->addInstanceValue($instanceValue);
+
+        $schemaJson = Schema::export($schema);
+
+        $this->assertEquals(
+            file_get_contents(__DIR__ . '/../resources/github-example-schema-with-examples.json'),
+            json_encode($schemaJson, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES)
+        );
+//        file_put_contents(__DIR__ . '/../resources/github-example-schema-with-examples.json', json_encode($schemaJson, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
     }
 
 
@@ -224,7 +239,7 @@ JSON
     {
         $instanceValue = json_decode(file_get_contents(__DIR__ . '/../resources/tests.json'));
         $schema = new Schema();
-        $b = new JsonSchemaFromInstance($schema);
+        $b = new SchemaMaker($schema);
         $b->addInstanceValue($instanceValue);
 
         $s = Schema::export($schema);
@@ -245,7 +260,7 @@ JSON
 JSON
 );
         $schema = new Schema();
-        $b = new JsonSchemaFromInstance($schema);
+        $b = new SchemaMaker($schema);
         $b->addInstanceValue($instanceValue);
 
         $expected = <<<'JSON'

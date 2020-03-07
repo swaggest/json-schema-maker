@@ -17,4 +17,7 @@ class Options
 
     /** @var bool set `nullable: true` instead of `type: [null, T]` for compatibility with Swagger 2.0  */
     public $useNullable = false;
+
+    /** @var bool set `example: <value>` for numbers and strings */
+    public $collectExamples = false;
 }

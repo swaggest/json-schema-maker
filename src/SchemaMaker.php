@@ -6,7 +6,7 @@ use Swaggest\JsonDiff\JsonPointer;
 use Swaggest\JsonSchema\Constraint\Properties;
 use Swaggest\JsonSchema\Schema;
 
-class JsonSchemaFromInstance
+class SchemaMaker
 {
     /** @var Schema */
     private $schema;
@@ -15,7 +15,6 @@ class JsonSchemaFromInstance
     public $options;
 
     /**
-     * JsonSchemaFromInstance constructor.
      * @param Schema $schema
      * @param Options|null $options
      */
@@ -37,14 +36,17 @@ class JsonSchemaFromInstance
             $this->addType(Schema::_ARRAY);
             $this->addArray($instanceValue, $path);
         } elseif (is_integer($instanceValue)) {
+            $this->addExample($instanceValue);
             $this->addType(Schema::INTEGER);
         } elseif (is_string($instanceValue)) {
+            $this->addExample($instanceValue);
             $this->addType(Schema::STRING);
         } elseif (is_bool($instanceValue)) {
             $this->addType(Schema::BOOLEAN);
         } elseif (null === $instanceValue) {
             $this->addType(Schema::NULL);
         } elseif (is_float($instanceValue)) {
+            $this->addExample($instanceValue);
             $this->addType(Schema::NUMBER);
         }
     }
@@ -59,7 +61,7 @@ class JsonSchemaFromInstance
 
         foreach ($instanceValue as $item) {
             if ($this->schema->items instanceof Schema) {
-                $f = new JsonSchemaFromInstance($this->schema->items, $this->options);
+                $f = new SchemaMaker($this->schema->items, $this->options);
                 $f->addInstanceValue($item, $path . '.element');
             }
         }
@@ -79,7 +81,7 @@ class JsonSchemaFromInstance
                 $this->schema->setProperty($propertyName, $property);
             }
             if ($property instanceof Schema) {
-                $f = new JsonSchemaFromInstance($property, $this->options);
+                $f = new SchemaMaker($property, $this->options);
                 $f->addInstanceValue($propertyValue, $path . '.' . JsonPointer::escapeSegment($propertyName));
             }
         }
@@ -97,6 +99,12 @@ class JsonSchemaFromInstance
                     $this->schema->required = null;
                 }
             }
+        }
+    }
+
+    private function addExample($value) {
+        if ($this->options->collectExamples && !isset($this->schema->{'example'}) && !isset($this->schema->{'examples'})) {
+            $this->schema->{'example'} = $value;
         }
     }
 
