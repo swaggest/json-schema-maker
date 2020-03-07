@@ -96,7 +96,7 @@ class SchemaMaker
             if ($removed) {
                 $this->schema->required = array_values($this->schema->required);
                 if (empty($this->schema->required)) {
-                    $this->schema->required = null;
+                    unset($this->schema->required);
                 }
             }
         }

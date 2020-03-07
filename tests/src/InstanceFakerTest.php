@@ -15,9 +15,9 @@ class InstanceFakerTest extends TestCase
 
         mt_srand(1);
 
-        $ss = new InstanceFaker($schema);
+        $instanceFaker = new InstanceFaker($schema);
 
-        $val = $ss->makeValue();
+        $val = $instanceFaker->makeValue();
 
         $this->assertEquals(
             file_get_contents(__DIR__ . '/../resources/github-example-fake-instance.json'),

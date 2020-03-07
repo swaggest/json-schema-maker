@@ -148,9 +148,9 @@ class InstanceFaker
 
         $result = [];
         if ($this->schema->items instanceof Schema) {
-            $ss = new self($this->schema->items);
+            $instanceFaker = new self($this->schema->items);
             for ($i = 0; $i < $numItems; $i++) {
-                $result [$i] = $ss->makeValue();
+                $result [$i] = $instanceFaker->makeValue();
             }
         } else {
             $result[] = $this->makeString();
