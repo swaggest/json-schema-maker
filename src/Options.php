@@ -20,4 +20,10 @@ class Options
 
     /** @var bool set `example: <value>` for numbers and strings */
     public $collectExamples = false;
+
+    /** @var bool treat non-existent `additionalProperties` as `additionalProperties: true` */
+    public $defaultAdditionalProperties = true;
+
+    /** @var int */
+    public $maxNesting = 5;
 }
