@@ -168,8 +168,7 @@
                     "example": "https://github.com/images/error/octocat_happy.gif"
                 },
                 "gravatar_id": {
-                    "type": "string",
-                    "example": ""
+                    "type": "string"
                 },
                 "url": {
                     "type": "string",
@@ -344,8 +343,7 @@
                     "example": "https://github.com/images/error/octocat_happy.gif"
                 },
                 "gravatar_id": {
-                    "type": "string",
-                    "example": ""
+                    "type": "string"
                 },
                 "url": {
                     "type": "string",
@@ -420,8 +418,7 @@
                     "example": "https://github.com/images/error/octocat_happy.gif"
                 },
                 "gravatar_id": {
-                    "type": "string",
-                    "example": ""
+                    "type": "string"
                 },
                 "url": {
                     "type": "string",
@@ -496,8 +493,7 @@
                     "example": "https://github.com/images/error/octocat_happy.gif"
                 },
                 "gravatar_id": {
-                    "type": "string",
-                    "example": ""
+                    "type": "string"
                 },
                 "url": {
                     "type": "string",
@@ -572,8 +568,7 @@
                     "example": "https://github.com/images/error/other_user_happy.gif"
                 },
                 "gravatar_id": {
-                    "type": "string",
-                    "example": ""
+                    "type": "string"
                 },
                 "url": {
                     "type": "string",
@@ -723,8 +718,7 @@
                     "example": "https://github.com/images/error/octocat_happy.gif"
                 },
                 "gravatar_id": {
-                    "type": "string",
-                    "example": ""
+                    "type": "string"
                 },
                 "url": {
                     "type": "string",
@@ -1011,8 +1005,7 @@
                     "example": "master"
                 },
                 "open_issues_count": {
-                    "type": "integer",
-                    "example": 0
+                    "type": "integer"
                 },
                 "is_template": {
                     "type": "boolean"
@@ -1077,8 +1070,7 @@
                     "example": 42
                 },
                 "network_count": {
-                    "type": "integer",
-                    "example": 0
+                    "type": "integer"
                 }
             },
             "type": "object"
@@ -1102,8 +1094,7 @@
                     "example": "https://github.com/images/error/octocat_happy.gif"
                 },
                 "gravatar_id": {
-                    "type": "string",
-                    "example": ""
+                    "type": "string"
                 },
                 "url": {
                     "type": "string",
@@ -1215,8 +1206,7 @@
                     "example": "https://github.com/images/error/octocat_happy.gif"
                 },
                 "gravatar_id": {
-                    "type": "string",
-                    "example": ""
+                    "type": "string"
                 },
                 "url": {
                     "type": "string",
@@ -1503,8 +1493,7 @@
                     "example": "master"
                 },
                 "open_issues_count": {
-                    "type": "integer",
-                    "example": 0
+                    "type": "integer"
                 },
                 "is_template": {
                     "type": "boolean"
@@ -1569,8 +1558,7 @@
                     "example": 42
                 },
                 "network_count": {
-                    "type": "integer",
-                    "example": 0
+                    "type": "integer"
                 }
             },
             "type": "object"
@@ -1594,8 +1582,7 @@
                     "example": "https://github.com/images/error/octocat_happy.gif"
                 },
                 "gravatar_id": {
-                    "type": "string",
-                    "example": ""
+                    "type": "string"
                 },
                 "url": {
                     "type": "string",

@@ -11,9 +11,8 @@ class InstanceFakerTest extends TestCase
 {
     public function testGithubExample()
     {
-        $schema = Schema::import(json_decode(file_get_contents(__DIR__ . '/../resources/github-example-schema-with-examples.json')));
-
         mt_srand(1);
+        $schema = Schema::import(json_decode(file_get_contents(__DIR__ . '/../resources/github-example-schema-with-examples.json')));
 
         $instanceFaker = new InstanceFaker($schema);
 
