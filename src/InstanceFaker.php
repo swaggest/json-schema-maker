@@ -158,7 +158,7 @@ class InstanceFaker
             return $this->schema->{'example'};
         }
 
-        $min = 0;
+        $min = 1;
         if ($this->schema->minimum !== null) {
             $min = $this->schema->minimum;
         }

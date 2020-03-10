@@ -25,5 +25,5 @@ class Options
     public $defaultAdditionalProperties = true;
 
     /** @var int */
-    public $maxNesting = 5;
+    public $maxNesting = 10;
 }

@@ -103,6 +103,11 @@ class SchemaMaker
     }
 
     private function addExample($value) {
+        // Skip zero values.
+        if ($value === 0 || $value === 0.0 || $value === '') {
+            return;
+        }
+        
         if ($this->options->collectExamples && !isset($this->schema->{'example'}) && !isset($this->schema->{'examples'})) {
             $this->schema->{'example'} = $value;
         }
