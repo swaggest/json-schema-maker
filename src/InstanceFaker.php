@@ -116,7 +116,6 @@ class InstanceFaker
                 return $this->schema->{'example'};
             }
             return true;
-//            return (bool)mt_rand(0, 1);
         }
 
         if (in_array(Schema::STRING, $types)) {

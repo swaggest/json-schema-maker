@@ -1,2 +1,5 @@
 parameters:
 	inferPrivatePropertyTypeFromConstructor: true
+	ignoreErrors:
+		- '#Access to an undefined property Swaggest\\JsonSchema\\NameMirror.+#'
+		- '#Binary operation \"\.\" between array<Swaggest\\JsonSchema\\SchemaContract>.+#'
