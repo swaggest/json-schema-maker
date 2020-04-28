@@ -30,7 +30,7 @@ class SchemaMaker
     public function addInstanceValue($instanceValue, $path = '')
     {
         $passes = 1;
-        if ($this->options->heuristicRequired) {
+        if ($this->options->heuristicRequired && empty($path)) {
             // Two passes are needed for heuristic required population to ensure missing properties in first samples
             // are honored.
             $passes = 2;
