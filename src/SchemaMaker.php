@@ -29,25 +29,34 @@ class SchemaMaker
 
     public function addInstanceValue($instanceValue, $path = '')
     {
-        if (is_object($instanceValue)) {
-            $this->addType(Schema::OBJECT);
-            $this->addObject($instanceValue, $path);
-        } elseif (is_array($instanceValue)) {
-            $this->addType(Schema::_ARRAY);
-            $this->addArray($instanceValue, $path);
-        } elseif (is_integer($instanceValue)) {
-            $this->addExample($instanceValue);
-            $this->addType(Schema::INTEGER);
-        } elseif (is_string($instanceValue)) {
-            $this->addExample($instanceValue);
-            $this->addType(Schema::STRING);
-        } elseif (is_bool($instanceValue)) {
-            $this->addType(Schema::BOOLEAN);
-        } elseif (null === $instanceValue) {
-            $this->addType(Schema::NULL);
-        } elseif (is_float($instanceValue)) {
-            $this->addExample($instanceValue);
-            $this->addType(Schema::NUMBER);
+        $passes = 1;
+        if ($this->options->heuristicRequired) {
+            // Two passes are needed for heuristic required population to ensure missing properties in first samples
+            // are honored.
+            $passes = 2;
+        }
+
+        for ($i = 0; $i < $passes; $i++) {
+            if (is_object($instanceValue)) {
+                $this->addType(Schema::OBJECT);
+                $this->addObject($instanceValue, $path);
+            } elseif (is_array($instanceValue)) {
+                $this->addType(Schema::_ARRAY);
+                $this->addArray($instanceValue, $path);
+            } elseif (is_integer($instanceValue)) {
+                $this->addExample($instanceValue);
+                $this->addType(Schema::INTEGER);
+            } elseif (is_string($instanceValue)) {
+                $this->addExample($instanceValue);
+                $this->addType(Schema::STRING);
+            } elseif (is_bool($instanceValue)) {
+                $this->addType(Schema::BOOLEAN);
+            } elseif (null === $instanceValue) {
+                $this->addType(Schema::NULL);
+            } elseif (is_float($instanceValue)) {
+                $this->addExample($instanceValue);
+                $this->addType(Schema::NUMBER);
+            }
         }
     }
 
@@ -73,7 +82,22 @@ class SchemaMaker
             $this->schema->setFromRef($this->options->defsPtr . JsonPointer::escapeSegment(ltrim($path, '.')));
             $this->schema->properties = new Properties();
         }
+
+        // Required State is a map reflecting state of property existence across all samples.
+        // If all samples contain property, the value is `true`.
+        // If any of samples does not contain property, the value is `false`.
+        // If value is not set, the property was not found in any of samples.
+        $requiredState = $this->schema->getMeta('requiredState');
+        if (null === $requiredState) {
+            $requiredState = [];
+        }
+
         $objVars = get_object_vars($instanceValue);
+        foreach ($requiredState as $propertyName => $state) {
+            if (!array_key_exists($propertyName, $objVars)) {
+                $requiredState[$propertyName] = false;
+            }
+        }
         foreach ($objVars as $propertyName => $propertyValue) {
             $property = $this->schema->properties->__get($propertyName);
             if (empty($property)) {
@@ -84,15 +108,22 @@ class SchemaMaker
                 $f = new SchemaMaker($property, $this->options);
                 $f->addInstanceValue($propertyValue, $path . '.' . JsonPointer::escapeSegment($propertyName));
             }
+
+            if (!array_key_exists($propertyName, $requiredState)) {
+                $requiredState[$propertyName] = true;
+            }
         }
+
         if (!empty($this->schema->required)) {
             $removed = false;
+
             foreach ($this->schema->required as $i => $key) {
-                if (!array_key_exists($key, $objVars)) {
+                if (empty($requiredState[$key])) {
                     $removed = true;
                     unset($this->schema->required[$i]);
                 }
             }
+
             if ($removed) {
                 $this->schema->required = array_values($this->schema->required);
                 if (empty($this->schema->required)) {
@@ -100,14 +131,28 @@ class SchemaMaker
                 }
             }
         }
+
+        if ($this->options->heuristicRequired) {
+            foreach ($requiredState as $propertyName => $state) {
+                if ($state === true) {
+                    $this->schema->required [] = $propertyName;
+                }
+            }
+
+            $this->schema->required = array_values(array_unique($this->schema->required));
+        }
+
+
+        $this->schema->addMeta($requiredState, 'requiredState');
     }
 
-    private function addExample($value) {
+    private function addExample($value)
+    {
         // Skip zero values.
         if ($value === 0 || $value === 0.0 || $value === '') {
             return;
         }
-        
+
         if ($this->options->collectExamples && !isset($this->schema->{'example'}) && !isset($this->schema->{'examples'})) {
             $this->schema->{'example'} = $value;
         }
