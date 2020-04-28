@@ -258,7 +258,7 @@ JSON
   }
 ]
 JSON
-);
+        );
         $schema = new Schema();
         $b = new SchemaMaker($schema);
         $b->addInstanceValue($instanceValue);
@@ -283,6 +283,59 @@ JSON
                 "string",
                 "object"
             ]
+        }
+    }
+}
+JSON;
+
+        $s = Schema::export($schema);
+        $this->assertEquals($expected, json_encode($s, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
+
+    }
+
+    public function testHeuristicRequired()
+    {
+        $instanceValue = json_decode(<<<'JSON'
+[
+  {
+    "everywhere": "def"
+  },
+  {
+    "everywhere": "def",
+    "somewhere": 1
+  },
+  {
+    "everywhere": "def",
+    "somewhere": 1
+  }
+]
+JSON
+        );
+        $schema = new Schema();
+        $b = new SchemaMaker($schema);
+        $b->options->heuristicRequired = true;
+        $b->addInstanceValue($instanceValue);
+
+        $expected = <<<'JSON'
+{
+    "items": {
+        "$ref": "#/definitions/element"
+    },
+    "type": "array",
+    "definitions": {
+        "element": {
+            "required": [
+                "everywhere"
+            ],
+            "properties": {
+                "everywhere": {
+                    "type": "string"
+                },
+                "somewhere": {
+                    "type": "integer"
+                }
+            },
+            "type": "object"
         }
     }
 }
