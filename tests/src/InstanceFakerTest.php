@@ -24,4 +24,39 @@ class InstanceFakerTest extends TestCase
         );
 //        file_put_contents(__DIR__ . '/../resources/github-example-fake-instance.json', json_encode($val, JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
     }
+
+    public function testRequiredProp()
+    {
+        $schemaData = <<<'JSON'
+{
+  "type": "object",
+  "required": [
+    "$ref"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$ref": {
+      "type": "string",
+      "examples": ["#/components/parameters/foo"],
+      "format": "uri-reference",
+      "oneOf": [
+        {
+          "pattern": "^#/components/parameters/"
+        },
+        {
+          "not": {
+            "pattern": "^#/"
+          }
+        }
+      ]
+    }
+  }
+}
+JSON;
+        $schema = Schema::import(json_decode($schemaData));
+        $instanceFaker = new InstanceFaker($schema);
+
+        $val = $instanceFaker->makeValue();
+        $this->assertEquals('{"$ref":"#\/components\/parameters\/foo"}', json_encode($val));
+    }
 }

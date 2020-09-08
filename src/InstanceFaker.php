@@ -38,6 +38,14 @@ class InstanceFaker
 
     public function makeValue()
     {
+        if (isset($this->schema->{'example'})) {
+            return $this->schema->{'example'};
+        }
+
+        if (!empty($this->schema->{'examples'}) && is_array($this->schema->{'examples'})) {
+            return $this->schema->{'examples'}[mt_rand(0, count($this->schema->{'examples'}) - 1)];
+        }
+
         if (is_array($this->schema->enum)) {
             return $this->schema->enum[mt_rand(0, count($this->schema->enum) - 1)];
         }
@@ -89,10 +97,6 @@ class InstanceFaker
         if ($this->schema->type === null) {
             if (isset($this->schema->default)) {
                 return $this->schema->default;
-            }
-
-            if (isset($this->schema->{'example'})) {
-                return $this->schema->{'example'};
             }
 
             return null;
