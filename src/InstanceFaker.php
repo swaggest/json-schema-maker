@@ -54,6 +54,10 @@ class InstanceFaker
             return $this->schema->const;
         }
 
+        if (isset($this->schema->default)) {
+            return $this->schema->default;
+        }
+
         if (isset($this->schema->properties) || isset($this->schema->additionalProperties)) {
             return $this->makeObject();
         }
@@ -95,10 +99,6 @@ class InstanceFaker
         }
 
         if ($this->schema->type === null) {
-            if (isset($this->schema->default)) {
-                return $this->schema->default;
-            }
-
             return null;
         }
 
@@ -116,9 +116,6 @@ class InstanceFaker
         }
 
         if (in_array(Schema::BOOLEAN, $types)) {
-            if (isset($this->schema->{'example'}) && (is_bool($this->schema->{'example'}))) {
-                return $this->schema->{'example'};
-            }
             return true;
         }
 
@@ -157,10 +154,6 @@ class InstanceFaker
 
     private function makeNumber()
     {
-        if (isset($this->schema->{'example'}) && (is_int($this->schema->{'example'}) || is_float($this->schema->{'example'}))) {
-            return $this->schema->{'example'};
-        }
-
         $min = 1;
         if ($this->schema->minimum !== null) {
             $min = $this->schema->minimum;
@@ -186,10 +179,6 @@ class InstanceFaker
 
         if ($this->schema->format === 'uuid') {
             return '123e4567-e89b-12d3-a456-426655440000';
-        }
-
-        if (isset($this->schema->{'example'}) && is_string($this->schema->{'example'})) {
-            return $this->schema->{'example'};
         }
 
         $length = mt_rand(2, 6);
