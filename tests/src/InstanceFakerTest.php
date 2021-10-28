@@ -59,4 +59,25 @@ JSON;
         $val = $instanceFaker->makeValue();
         $this->assertEquals('{"$ref":"#\/components\/parameters\/foo"}', json_encode($val));
     }
+
+    public function testSimple() {
+        $schema = Schema::import(json_decode(<<<'JSON'
+{
+  "properties": {
+    "foo": {
+      "type": "string"
+    },
+    "bar": {
+      "enum": ["baz", "quux"]
+    }
+  }
+}
+JSON
+));
+        mt_srand(1);
+        $instanceFaker = new InstanceFaker($schema);
+
+        $val = $instanceFaker->makeValue();
+        $this->assertEquals('{"foo":"cbbfff","bar":"baz","defba":"dcea"}', json_encode($val));
+    }
 }

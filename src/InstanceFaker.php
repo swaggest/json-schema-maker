@@ -274,7 +274,7 @@ class InstanceFaker
             $tail = substr($newPath, -$i);
             $check = substr($newPath, -2 * $i, $i);
 
-            if ($tail === $check) {
+            if (($tail === $check) && strpos($tail, '/') !== false) {
                 return false;
             }
         }
